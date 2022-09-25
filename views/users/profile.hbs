@@ -1,0 +1,32 @@
+<div class="card mb-3" style="max-width: 600px;">
+  <div class="row g-0">
+    <div class="col-md-4">
+      <img {{#if user.image}}
+            src="{{user.image}}"
+          {{else}}
+            src="https://via.placeholder.com/600/000000/FFFFFF/?text=No update your pic"
+          {{/if}} class="img-fluid rounded-start" alt="user-image">
+    </div>
+    <div class="col-md-8">
+      <div class="card-body">
+        <h5 class="card-title">{{user.name}}</h5>
+        <p class="card-text">{{user.email}}</p>
+        <p>已評論餐廳：{{ commentLen }} 筆
+        </p>
+        <a href="/users/{{user.id}}/edit" class="btn btn-primary">edit</a>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="card text-dark bg-light mb-3" style="max-width: 37rem;">
+  <div class="card-header">已評論餐廳：{{ commentLen }} 筆</div>
+  <div class="card-body">
+    {{#each comment}}
+    <div style="max-width: 100px; margin: 5px; display: inline-block">
+      <a href="/restaurants/{{ this.Restaurant.id }}"><img src="{{ this.Restaurant.image }}" alt="restaurant-img" title="{{ this.Restaurant.name }}" style="width: 100%"></a>
+    </div>
+    {{/each}}
+    </p>
+  </div>
+</div>
+
