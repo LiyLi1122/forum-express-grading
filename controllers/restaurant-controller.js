@@ -1,5 +1,5 @@
 // restaurantController 物件裡面有 getRestaurants 方法
-const { Restaurant, Category, User, Comment } = require('../models')
+const { Restaurant, Category, User, Comment, Favorite } = require('../models')
 const { getOffset, getPagination } = require('../helpers/pagination-helper')
 
 const restaurantController = {
@@ -24,12 +24,14 @@ const restaurantController = {
       Category.findAll({ raw: true }) // 這邊就不用 nest
     ])
       .then(([restaurants, categories]) => { // 做縮字整理至 50 字
-        const favoriteRestaurantsId = req.user && req.user.FavoritedRestaurants.map(fr => fr.id) // map 問題
+        const favoriteRestaurantsIdList = req.user && req.user.FavoritedRestaurants.map(fr => fr.id)
+        const likedRestaurantsIdList = req.user && req.user.LikedRestaurants.map(like => like.id)
         const data = restaurants.rows.map(restaurant => {
           return {
             ...restaurant,
             description: restaurant.description.substring(0, 50), // 沒有寫 restaurant 會出 description 還沒定義的錯誤
-            isFavorited: favoriteRestaurantsId.includes(restaurant.id)
+            isFavorited: favoriteRestaurantsIdList.includes(restaurant.id),
+            isLiked: likedRestaurantsIdList.includes(restaurant.id)
             // {} 裡新增 isFavorited key
             // === map( => ({...回傳到陣列的值}))
             // [].includes(...) 振列裡面包含撈出來的餐廳 id 就給 T 否則 F 到 restaurants.hbs
@@ -88,6 +90,23 @@ const restaurantController = {
         comments
       })
     }).catch(error => next(error))
+  },
+  getTopRestaurants: (req, res, next) => {
+    return Restaurant.findAll({
+      include: [{
+        model: User, as: 'FavoritedUsers'
+      }]
+    })
+      .then(restaurants => {
+        const result = restaurants.map(rest => ({
+          ...rest.toJSON(),
+          description: rest.dataValues.description.substring(0, 50),
+          favoritedCount: rest.FavoritedUsers.length,
+          isFavorited: req.user && req.user.FavoritedRestaurants.some(r => r.id === rest.id) // some 有一個符合就是 true
+        })).sort((a, b) => b.favoritedCount - a.favoritedCount)
+        res.render('top-restaurants', { restaurants: result.slice(0, 10) })
+      })
+      .catch(err => next(err))
   }
 }
 
