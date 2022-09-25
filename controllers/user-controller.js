@@ -1,4 +1,4 @@
-const { User, Comment, Restaurant, Favorite, Followship } = require('../models') // function named User
+const { User, Comment, Restaurant, Favorite, Followship, Like } = require('../models') // function named User
 const bcrypt = require('bcryptjs')
 const { imgurFileHandler } = require('../helpers/file-helpers')
 // const id = require('faker/lib/locales/id_ID')
@@ -52,6 +52,8 @@ const userController = {
             { model: Restaurant, attributes: ['name', 'image'] }
           ],
           where: { userId: user.id, text: { [Op.not]: null } },
+          // group: [['restaurantId']],
+          // order: [['createdAt', 'DESC']],
           raw: true,
           nest: true,
           attributes: [[Sequelize.fn('DISTINCT', Sequelize.col('restaurant_id')), 'restaurantId']
@@ -180,6 +182,41 @@ const userController = {
       })
       .then(() => res.redirect('back'))
       .catch(err => next(err))
+  },
+  addLike: (req, res, next) => {
+    const { restaurantId } = req.params
+    return Promise.all([
+      Restaurant.findByPk(restaurantId),
+      Like.findOne({ where: { userId: req.user.id, restaurantId } })
+    ])
+      .then(([restaurant, like]) => {
+        if (!restaurant) throw new Error("Restaurant didn't exist!")
+        if (like) throw new Error('You have liked this restaurant!')
+
+        return Like.create({
+          userId: req.user.id,
+          restaurantId
+        })
+      })
+      .then(() => res.redirect('back'))
+      .catch(error => next(error))
+  },
+  removeLike: (req, res, next) => {
+    console.log('\nreq.user:\n', req.user)
+    const { restaurantId } = req.params
+    return Like.findOne({
+      where: {
+        userId: req.user.id,
+        restaurantId
+      }
+    })
+      .then(like => {
+        if (!like) throw new Error("you haven't liked this restaurant")
+
+        return like.destroy()
+      })
+      .then(() => res.redirect('back'))
+      .catch(error => next(error))
   }
   // getUser: async (req, res, next) => {
   //   const [result] = await sequelize.query('SELECT * FROM users WHERE id = ?', {
