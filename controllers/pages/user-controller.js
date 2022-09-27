@@ -1,6 +1,6 @@
-const { User, Comment, Restaurant, Favorite, Followship, Like } = require('../models') // function named User
+const { User, Comment, Restaurant, Favorite, Followship, Like } = require('../../models') // function named User
 const bcrypt = require('bcryptjs')
-const { imgurFileHandler } = require('../helpers/file-helpers')
+const { imgurFileHandler } = require('../../helpers/file-helpers')
 // const id = require('faker/lib/locales/id_ID')
 const { Op, Sequelize } = require('sequelize')
 // const { Sequelize, QueryTypes } = require('sequelize')

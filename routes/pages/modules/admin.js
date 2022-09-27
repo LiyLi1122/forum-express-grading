@@ -1,8 +1,8 @@
 const express = require('express')
 const router = express.Router()
-const adminController = require('../../controllers/admin-controller')
-const categoryController = require('../../controllers/categories-controller')
-const upload = require('../../middleware/multer')// 將預計檔案存放位置相關設定載進來
+const adminController = require('../../../controllers/pages/admin-controller')
+const categoryController = require('../../../controllers/pages/categories-controller')
+const upload = require('../../../middleware/multer')// 將預計檔案存放位置相關設定載進來
 
 // 閱覽一筆 category
 router.get('/categories/:id', categoryController.getCategories)
