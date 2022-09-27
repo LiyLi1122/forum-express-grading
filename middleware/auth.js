@@ -1,7 +1,9 @@
 // middlewares
-// authenticated：用 req.isAuthenticate() 確定能不能去除了後台以外的路徑
+
+// 在前往路由清單之前用 authenticated 檢查
 // T -> 成功登入，可以通行至其他路徑
 // F -> 如果沒有登入導到登入頁面
+// authenticated：用 req.isAuthenticate() 確定能不能去除了後台以外的路徑
 
 // authenticatedAdmin：用 req.isAuthenticate() 確定能不能去後台
 // T -> 成功登入 && req.user.isAdmin 是 T 表示登入狀態且是管理者身分，因此可以前往 admin

@@ -1,5 +1,5 @@
 const getUser = req => {
-  return req.user || null // 驗證成功 || 驗證不成功
+  return req.user || null // 驗證成功 || 驗證不成功(檢查從 passport 過來的 req，讓 hbs 可以視情況顯示該顯示的部分)
 }
 
 const ensureAuthenticated = req => {

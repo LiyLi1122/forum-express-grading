@@ -1,6 +1,6 @@
 const express = require('express')
 // const routes = require('./routes')
-const { pages } = require('./routes')
+const { pages, apis } = require('./routes')
 const hbs = require('express-handlebars')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -35,7 +35,8 @@ app.use(session({
 app.use(flash()) // req.flash
 app.use(passport.initialize()) // 初始化 Passport 檔案??
 app.use(passport.session())// 用檔案啟動 session 功能??
-app.use('/upload', express.static(path.join(__dirname, 'upload'))) // 讓外部傳入的 request 可以取得 /upload 路徑，由於不是一般路徑，直接用靜態檔案方式指定路徑
+app.use('/upload', express.static(path.join(__dirname, 'upload')))
+// 讓外部傳入的 request 匹配 /upload 路徑，符合匹配就執行 express.static...
 
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')
@@ -43,7 +44,7 @@ app.use((req, res, next) => {
   res.locals.user = getUser(req)
   next()
 })
-
+app.use('/api', apis) // 這邊要注意跟下方 pages 匹配嚴謹的放置順序
 app.use(pages)
 
 app.listen(port, () => {
