@@ -76,17 +76,17 @@
 
     {{!-- 數字頁數按鍵 --}}
     {{#each pagination.pages}}
-    {{!-- 將傳過來的頁碼 href 變成 #，表示重新整理 ( 待在現在這個連結 ) --}}
-    {{#ifCond this ../pagination.currentPage}}
-    <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
-    {{!-- 不是傳過來的頁面數字就正常顯示 href (頁數數字 + 類別) --}}
-    {{!-- 因為所有內容都在同一頁發生，所以要提供多個條件前往後端就可以一次做很多事情 --}}
-    {{else}}
-    <li class="page-item">
-      <a class="page-link" href="/restaurants?page={{this}}&categoryId={{../categoryId}}">{{this}}</a>
-    </li>
+      {{!-- 將傳過來的頁碼 href 變成 #，表示重新整理 ( 待在現在這個連結 ) --}}
+      {{#ifCond this ../pagination.currentPage}}
+      <li class="page-item active"><a class="page-link" href="#">{{this}}</a></li>
+      {{!-- 不是傳過來的頁面數字就正常顯示 href (頁數數字 + 類別) --}}
+      {{!-- 因為所有內容都在同一頁發生，所以要提供多個條件前往後端就可以一次做很多事情 --}}
+      {{else}}
+      <li class="page-item">
+        <a class="page-link" href="/restaurants?page={{this}}&categoryId={{../categoryId}}">{{this}}</a>
+      </li>
 
-    {{/ifCond}}
+      {{/ifCond}}
     {{/each}}
 
     {{!-- next 按鍵 --}}

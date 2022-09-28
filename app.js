@@ -44,7 +44,9 @@ app.use((req, res, next) => {
   res.locals.user = getUser(req)
   next()
 })
-app.use('/api', apis) // 這邊要注意跟下方 pages 匹配嚴謹的放置順序
+app.use('/api', apis)
+// 這邊要注意跟下方 pages 匹配嚴謹的放置順序
+// 路由匹配 /api 進入 apis
 app.use(pages)
 
 app.listen(port, () => {
