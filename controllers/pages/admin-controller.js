@@ -1,19 +1,12 @@
 const { Restaurant, User, Category } = require('../../models') // === require('../models/index')
-
-// const { localFileHandler } = require('../helpers/file-helpers')
 const { imgurFileHandler } = require('../../helpers/file-helpers')
+// const { localFileHandler } = require('../helpers/file-helpers')
+
+const adminServices = require('../../services/admin-services')
 
 const adminController = {
   getRestaurants: (req, res, next) => {
-    Restaurant.findAll({ // [{}, {}]
-      raw: true, // 轉成單純 JS 物件，不轉也可以但要在.dataValues 取值
-      nest: true, // 變成巢狀( key-value )
-      include: [Category] // 這邊指的是在 model 用 include 將關聯資料拉進來 findAll 的準備回傳值
-    })
-      .then(restaurants => {
-        return res.render('admin/restaurants', { restaurants })
-      })
-      .catch(error => next(error))
+    adminServices.getRestaurants(req, (error, data) => error ? next(error) : res.render('admin/restaurants', data))
   },
   createRestaurant: (req, res, next) => {
     return Category.findAll({ raw: true })

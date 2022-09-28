@@ -18,7 +18,7 @@ const authenticated = (req, res, next) => {
 
 const authenticatedAdmin = (req, res, next) => {
   if (helpers.ensureAuthenticated(req)) {
-    if (helpers.getUser(req).isAdmin) return next()
+    if (helpers.getUser(req).isAdmin) return next() // passport User.finOne 得 user = {name:.., isAdmin:...}
 
     res.redirect('/') // 從 admin 改成 user 會轉跳到這邊
   }

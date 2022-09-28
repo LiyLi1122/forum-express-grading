@@ -9,7 +9,7 @@ passport.use(new LocalStrategy(
     passwordField: 'password',
     passReqToCallback: true
   }, (req, email, password, done) => {
-    User.findOne({ where: { email } })
+    User.findOne({ where: { email } }) // user -> 因為是 findOne 所以 {}
       .then(user => {
         if (!user) return done(null, false, req.flash('error_messages', '帳號或密碼錯誤!'))
 
