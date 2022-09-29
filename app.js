@@ -25,6 +25,7 @@ const handlebarsHelpers = require('./helpers/handlebars-helpers')// 這邊直接
 app.engine('hbs', hbs({ defaultLayout: 'main', extname: '.hbs', helpers: handlebarsHelpers, multiHelpers }))
 app.set('view engine', 'hbs')
 app.use(express.urlencoded({ extended: true })) // 因為太常用到了，所以就被包進 express 裡面
+app.use(express.json()) // 調用此方法 //前後端分離約定用 json 格式交換資料
 app.use(methodOverride('_method'))
 app.use(session({
   secret: SESSION_SECRET,
@@ -37,6 +38,7 @@ app.use(passport.initialize()) // 初始化 Passport 檔案??
 app.use(passport.session())// 用檔案啟動 session 功能??
 app.use('/upload', express.static(path.join(__dirname, 'upload')))
 // 讓外部傳入的 request 匹配 /upload 路徑，符合匹配就執行 express.static...
+// __dirname -> 所在資料夾
 
 app.use((req, res, next) => {
   res.locals.success_messages = req.flash('success_messages')

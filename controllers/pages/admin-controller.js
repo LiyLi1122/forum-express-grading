@@ -14,18 +14,13 @@ const adminController = {
       .catch(error => next(error))
   },
   postRestaurant: (req, res, next) => {
-    const { name } = req.body
-    if (!name) throw new Error('Restaurant name is required!')
-    imgurFileHandler(req.file)
-      .then(filePath => {
-        req.body.image = filePath || null // 有要上傳檔案 || 沒有要上傳檔案
-        return Restaurant.create({ ...req.body })
-      })
-      .then(() => {
-        req.flash('success_messages', '餐廳新增成功!')
-        res.redirect('/admin/restaurants')
-      })
-      .catch(error => next(error))
+    adminServices.postRestaurant(req, (error, data) => {
+      if (error) return next(error)// next(error) 直接去 error handler
+
+      req.flash('success_messages', '餐廳新增成功!')
+      req.session.createData = data
+      return res.redirect('/admin/restaurants')
+    })
   },
   getRestaurant: (req, res, next) => {
     Restaurant.findByPk(req.params.id, {
