@@ -1,10 +1,16 @@
-// const { authenticated } = require('../../middleware/auth')
 const express = require('express')
 const router = express.Router()
 const restController = require('../../controllers/apis/restaurant-controller')
-const adminController = require('../../controllers/apis/admin-controller')
+const admin = require('./modules/admin')
+const { apiErrorHandler } = require('../../middleware/error-handler')
 
+// admin
+router.use('/admin', admin)
+
+// normal
 router.get('/restaurants', restController.getRestaurants)
-router.get('/admin/restaurants', adminController.getRestaurants)
+
+// error handler
+router.use('/', apiErrorHandler)
 
 module.exports = router

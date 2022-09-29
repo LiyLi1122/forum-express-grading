@@ -74,17 +74,11 @@ const adminController = {
       .catch(error => next(error))
   },
   deleteRestaurant: (req, res, next) => {
-    Restaurant.findByPk(req.params.id)
-      .then(restaurant => {
-        if (!restaurant) throw new Error("Restaurant isn't exist!")
-
-        return restaurant.destroy()
-      })
-      .then(() => {
-        req.flash('success_messages', 'Delete successfully')
-        res.redirect('/admin/restaurants')
-      })
-      .catch(error => next(error))
+    adminServices.deleteRestaurant(req, (error, data) => {
+      if (error) return next(error) // to .catch
+      req.session.deleteData = data // 考量資安問題所以存在 Session 裡面(data => { restaurant: deletedRestaurant })
+      res.redirect('/admin/restaurants')
+    })
   },
   getUsers: (req, res, next) => {
     return User.findAll({
