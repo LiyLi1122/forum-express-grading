@@ -20,8 +20,11 @@ passport.use(new LocalStrategy(
           })
       })
   }))
+
+// 當在 passport.authenticate() 的 session 等於 true 時才會執行下面
 // 序列化 使用者 必要
 passport.serializeUser((user, done) => {
+  console.log('true')
   return done(null, user.id)
 })
 
