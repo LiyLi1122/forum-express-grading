@@ -1,3 +1,7 @@
+if (process.env.NODE_ENV !== 'production') {
+  require('dotenv').config()
+} // 這邊的意思是 -> 如果應用程式不是在正式上線模式(也就是 Heroku 中設定的環境變數)就去讀取 .env
+
 const express = require('express')
 // const routes = require('./routes')
 const { pages, apis } = require('./routes')
@@ -12,10 +16,6 @@ const hbsHelpers = require('handlebars-helpers') // 外部套件
 const multiHelpers = hbsHelpers()
 const port = process.env.PORT || 3000
 require('./models') // 這邊會呼叫 models 裡面的檔案，所以一定要寫'
-
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config()
-} // 這邊的意思是 -> 如果應用程式不是在正式上線模式(也就是 Heroku 中設定的環境變數)就去讀取 .env
 
 const SESSION_SECRET = 'secret'
 
